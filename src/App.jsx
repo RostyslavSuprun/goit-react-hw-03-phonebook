@@ -9,17 +9,23 @@ import ContactList from './components/ContactList/ContactList';
 import styles from './App.module.css';
 
 class App extends Component {
-  // Стейт з базовими даними відповідно до завдання
+  // Стейт очищено при першому старті
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    // Початкове заповнення поля Find contacts by name
+    contacts: [],
     filter: '',
   };
+  // Перевірка наявності збережених контактів в локалсториджі
+  componentDidMount() {
+    const localContacts = localStorage.getItem('contacts');
+    if (localContacts) {
+      this.setState({ contacts: JSON.parse(localContacts) });
+    }
+  }
+  // зміна збережених контактів після апдейту стейту
+  componentDidUpdate() {
+    const { contacts } = this.state;
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }
 
   // Метод, що додає контакт
   addContact = newContact => {
